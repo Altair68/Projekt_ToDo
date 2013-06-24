@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.GridPane?>
 
-<AnchorPane prefHeight="276.0" prefWidth="289.0" xmlns:fx="http://javafx.com/fxml" fx:controller="GUI.Controller">
+<AnchorPane prefHeight="276.0" prefWidth="289.0" xmlns:fx="http://javafx.com/fxml" fx:controller="GUI.ControllerLogin">
   <children>
     <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <tabs>
