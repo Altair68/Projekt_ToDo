@@ -1,5 +1,6 @@
 package GUI;
 
+import TODO.ListController;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +15,7 @@ import java.io.IOException;
 public class Main extends Application {
 
 	private static Stage primaryStage;
+	private ListController listController = ListController.getListController();
 
 	@Override
     public void start(Stage primaryStage) throws Exception{
@@ -25,7 +27,8 @@ public class Main extends Application {
 		    @Override
 		    public void handle(WindowEvent windowEvent) {
 			    //Wenn das Fenster geschlossen wird.
-			    System.out.println("Speichern");
+			    listController.marshallData();
+			    System.out.printf("test");
 		    }
 	    });
     }
@@ -46,11 +49,11 @@ public class Main extends Application {
 		}
 	}
 
-	public void hideLoginShowMain() {
-
+	public static Stage getPrimaryStage() {
+		return primaryStage;
 	}
 
-    public static void main(String[] args) {
+	public static void main(String[] args) {
         launch(args);
     }
 }

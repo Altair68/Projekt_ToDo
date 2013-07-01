@@ -3,6 +3,7 @@ package TODO;
 import javax.xml.bind.*;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -13,15 +14,20 @@ import java.util.List;
  */
 public class ListController {
 
+	private static ListController listController;
+
 	public static final String SAVE_DIR_NAME = "ToDoList";
 
 	private List<ToDoList> toDoListList;
 
-	public ListController() {
+	private List<User> Users;
+
+	private ListController() {
 		checkDirs();
 	}
 
 	public void marshallData() {
+		System.out.printf("asd");
 		for (ToDoList eachList : getToDoListList()) {
 			JAXBContext context;
 			try {
@@ -43,6 +49,25 @@ public class ListController {
 				e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
 			}
 		}
+		JAXBContext context;
+		try {
+			File theFile = new File(SAVE_DIR_NAME + "/" + "users.xml");
+			if (!theFile.exists()) {
+				theFile.createNewFile();
+			}
+			context = JAXBContext.newInstance(ArrayList.class);
+			Marshaller m = context.createMarshaller();
+			m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+			m.marshal(getUsers(), new FileOutputStream(theFile));
+			m.marshal(getUsers(), System.out);
+		} catch (JAXBException e) {
+			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+		} catch (IOException e) {
+			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+		}
 	}
 
 	public void unmarshallData() {
@@ -63,8 +88,12 @@ public class ListController {
 					Unmarshaller u = jc.createUnmarshaller ();
 					JAXBElement element = (JAXBElement) u.unmarshal (eachFile);
 
-					ToDoList list = (ToDoList) element.getValue ();
-					getToDoListList().add(list);
+					if (element.getValue() instanceof ToDoList) {
+						ToDoList list = (ToDoList) element.getValue ();
+						getToDoListList().add(list);
+					} else if (element.getValue() instanceof ArrayList) {
+						getUsers().addAll((List)element.getValue());
+					}
 				} catch (JAXBException e) {
 					e.printStackTrace ();
 				}
@@ -84,5 +113,73 @@ public class ListController {
 			toDoListList = new ArrayList<ToDoList>();
 		}
 		return toDoListList;
+	}
+
+	public List<User> getUsers() {
+		if (Users == null) {
+			Users = new ArrayList<User>();
+		}
+		return Users;
+	}
+
+	public boolean addUser(User aNewUser) {
+		if (!checkUserExists(aNewUser)) {
+			getUsers().add(aNewUser);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public boolean checkUserExists(User aUser) {
+		if (getUsers() == null) {
+			return false;
+		} else {
+			String theUsername = aUser.getUsername();
+			for (User theUser : getUsers()) {
+				if (theUsername.equals(theUser.getUsername())) {
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+
+	public User findUserByUsername(String aUsername) {
+		for (User theUser : getUsers()) {
+			if (aUsername.equals(theUser.getUsername())) {
+				return theUser;
+			}
+		}
+		return new User("-1", "-1");
+	}
+
+	public boolean removeUser(User aUserToDelete) {
+		if (checkUserExists(aUserToDelete)) {
+			getUsers().remove(findUserByUsername(aUserToDelete.getUsername()));
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public boolean checkPassword(User aUserToCheck) {
+		if (checkUserExists(aUserToCheck)) {
+			User theDbUser = findUserByUsername(aUserToCheck.getUsername());
+			if (theDbUser.getPassword().equals(aUserToCheck.getPassword())) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
+	public static ListController getListController() {
+		if (listController == null) {
+			listController = new ListController();
+		}
+		return listController;
 	}
 }

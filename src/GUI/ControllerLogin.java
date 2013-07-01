@@ -1,5 +1,7 @@
 package GUI;
 
+import TODO.ListController;
+import TODO.User;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -21,42 +23,71 @@ public class ControllerLogin implements Initializable {
 	@FXML
 	PasswordField logPassword;
 	@FXML
+	Label logLabelInfo;
+	@FXML
 	TextField regUsername;
 	@FXML
 	PasswordField regPassword;
 	@FXML
 	PasswordField regPasswordRe;
+	@FXML
+	Label regLabelInfo;
 
-	//Main
-	@FXML
-	TreeView taskTree;
-	@FXML
-	ListView listList;
-	@FXML
-	MenuItem menuFileNew;
-	@FXML
-	MenuItem menuFileSave;
-	@FXML
-	MenuItem menuFileClose;
-	@FXML
-	MenuItem menuHelpAbout;
+	//Variablen
+	ListController listController = ListController.getListController();
 
 
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle) {
+		listController.unmarshallData();
+
 		loginButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
-				try {
-					Main.switchScene("main.fxml");
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
-				System.out.println("Test");
+				loginButtonAction();
 			}
 		});
 
+		registerButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent mouseEvent) {
+				registerButtonAction();
+			}
+		});
+	}
 
+	private void registerButtonAction() {
+		String theUsername = regUsername.getText();
+		String thePassword = regPassword.getText();
+		String thePasswordRe = regPasswordRe.getText();
+
+		if (thePassword.equals(thePasswordRe)) {
+			if (listController.addUser(new User(theUsername, thePassword))) {
+				regLabelInfo.setVisible(true);
+				regLabelInfo.setText("Die Registrierung war erfolgreich!");
+			} else {
+				regLabelInfo.setVisible(true);
+				regLabelInfo.setText("Die Registrierung war nicht erfolgreich!");
+			}
+		} else {
+			regLabelInfo.setVisible(true);
+			regLabelInfo.setText("Die Passwörter stimmen nicht überein!");
+		}
+	}
+
+	private void loginButtonAction() {
+		String theUsername = logUsername.getText();
+		String thePassword = logPassword.getText();
+		User loginUser = new User(theUsername, thePassword);
+		if (listController.checkPassword(loginUser)) {
+			try {
+				Main.switchScene("main.fxml");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			logLabelInfo.setVisible(true);
+			logLabelInfo.setText("Der Login war nicht erfolgreich.");
+		}
 	}
 }

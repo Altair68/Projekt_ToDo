@@ -1,5 +1,6 @@
 package GUI;
 
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -27,6 +28,11 @@ public class ControllerMain implements Initializable {
 
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle) {
-
+		menuFileClose.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent actionEvent) {
+				Main.getPrimaryStage().close();
+			}
+		});
 	}
 }
