@@ -3,7 +3,6 @@ package TODO;
 import javax.xml.bind.*;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -20,7 +19,7 @@ public class ListController {
 
 	private List<ToDoList> toDoListList;
 
-	private List<User> Users;
+	private UserList users;
 
 	private ListController() {
 		checkDirs();
@@ -55,12 +54,12 @@ public class ListController {
 			if (!theFile.exists()) {
 				theFile.createNewFile();
 			}
-			context = JAXBContext.newInstance(ArrayList.class);
+			context = JAXBContext.newInstance(UserList.class);
 			Marshaller m = context.createMarshaller();
 			m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
-			m.marshal(getUsers(), new FileOutputStream(theFile));
-			m.marshal(getUsers(), System.out);
+			m.marshal(getUserList(), new FileOutputStream(theFile));
+			m.marshal(getUserList(), System.out);
 		} catch (JAXBException e) {
 			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
 		} catch (FileNotFoundException e) {
@@ -71,31 +70,37 @@ public class ListController {
 	}
 
 	public void unmarshallData() {
+		System.out.println("Unmarshall");
 		File dir = new File(SAVE_DIR_NAME);
 		if (dir.exists()) {
 			File[] files = dir.listFiles(new FileFilter() {
 				@Override
 				public boolean accept(File pathname) {
-					if("xml".equals(pathname.getName().substring(pathname.getName().length()-4))) {
+					if("xml".equals(pathname.getName().substring(pathname.getName().length()-3))) {
 						return true;
 					}
 					return false;
 				}
 			});
 			for (File eachFile : files) {
-				try {
-					JAXBContext jc = JAXBContext.newInstance ("generated");
-					Unmarshaller u = jc.createUnmarshaller ();
-					JAXBElement element = (JAXBElement) u.unmarshal (eachFile);
-
-					if (element.getValue() instanceof ToDoList) {
-						ToDoList list = (ToDoList) element.getValue ();
-						getToDoListList().add(list);
-					} else if (element.getValue() instanceof ArrayList) {
-						getUsers().addAll((List)element.getValue());
+				if ("users.xml".equals(eachFile.getName())) {
+					try {
+						JAXBContext jc = JAXBContext.newInstance (UserList.class);
+						Unmarshaller u = jc.createUnmarshaller ();
+						UserList list = (UserList) u.unmarshal(eachFile);
+						users = list;
+					} catch (JAXBException e) {
+						e.printStackTrace ();
 					}
-				} catch (JAXBException e) {
-					e.printStackTrace ();
+				} else {
+					try {
+						JAXBContext jc = JAXBContext.newInstance (ToDoList.class);
+						Unmarshaller u = jc.createUnmarshaller ();
+						ToDoList list = (ToDoList) u.unmarshal (eachFile);
+						getToDoListList().add(list);
+					} catch (JAXBException e) {
+						e.printStackTrace ();
+					}
 				}
 			}
 		}
@@ -115,16 +120,16 @@ public class ListController {
 		return toDoListList;
 	}
 
-	public List<User> getUsers() {
-		if (Users == null) {
-			Users = new ArrayList<User>();
+	public UserList getUserList() {
+		if (users == null) {
+			users = new UserList();
 		}
-		return Users;
+		return users;
 	}
 
 	public boolean addUser(User aNewUser) {
 		if (!checkUserExists(aNewUser)) {
-			getUsers().add(aNewUser);
+			getUserList().add(aNewUser);
 			return true;
 		} else {
 			return false;
@@ -132,11 +137,11 @@ public class ListController {
 	}
 
 	public boolean checkUserExists(User aUser) {
-		if (getUsers() == null) {
+		if (getUserList() == null) {
 			return false;
 		} else {
 			String theUsername = aUser.getUsername();
-			for (User theUser : getUsers()) {
+			for (User theUser : getUserList().getUsers()) {
 				if (theUsername.equals(theUser.getUsername())) {
 					return true;
 				}
@@ -146,7 +151,7 @@ public class ListController {
 	}
 
 	public User findUserByUsername(String aUsername) {
-		for (User theUser : getUsers()) {
+		for (User theUser : getUserList().getUsers()) {
 			if (aUsername.equals(theUser.getUsername())) {
 				return theUser;
 			}
@@ -156,7 +161,7 @@ public class ListController {
 
 	public boolean removeUser(User aUserToDelete) {
 		if (checkUserExists(aUserToDelete)) {
-			getUsers().remove(findUserByUsername(aUserToDelete.getUsername()));
+			getUserList().remove(findUserByUsername(aUserToDelete.getUsername()));
 			return true;
 		} else {
 			return false;
