@@ -88,18 +88,23 @@ public class ControllerLogin implements Initializable {
 		String theUsername = regUsername.getText();
 		String thePassword = regPassword.getText();
 		String thePasswordRe = regPasswordRe.getText();
-
-		if (thePassword.equals(thePasswordRe)) {
-			if (listController.addUser(new User(theUsername, thePassword))) {
-				regLabelInfo.setVisible(true);
-				regLabelInfo.setText("Die Registrierung war erfolgreich!");
+		if ("".equals(thePassword.trim())) {
+			regLabelInfo.setVisible(true);
+			regLabelInfo.setText("Bitte wählen sie ein Passwort!");
+		} else {
+			if (thePassword.equals(thePasswordRe)) {
+				if (listController.addUser(new User(theUsername, thePassword))) {
+					regLabelInfo.setVisible(true);
+					regLabelInfo.setText("Die Registrierung war erfolgreich!");
+				} else {
+					regLabelInfo.setVisible(true);
+					regLabelInfo.setText("Die Registrierung war nicht erfolgreich!");
+				}
 			} else {
 				regLabelInfo.setVisible(true);
-				regLabelInfo.setText("Die Registrierung war nicht erfolgreich!");
+				regLabelInfo.setText("Die Passwörter stimmen nicht überein!");
 			}
-		} else {
-			regLabelInfo.setVisible(true);
-			regLabelInfo.setText("Die Passwörter stimmen nicht überein!");
+
 		}
 	}
 
