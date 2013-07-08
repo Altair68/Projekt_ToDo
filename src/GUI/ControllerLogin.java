@@ -6,7 +6,10 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 import java.net.URL;
@@ -32,6 +35,10 @@ public class ControllerLogin implements Initializable {
 	PasswordField regPasswordRe;
 	@FXML
 	Label regLabelInfo;
+	@FXML
+	AnchorPane logAnchor;
+	@FXML
+	AnchorPane regAnchor;
 
 	//Variablen
 	ListController listController = ListController.getListController();
@@ -52,6 +59,24 @@ public class ControllerLogin implements Initializable {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
 				registerButtonAction();
+			}
+		});
+
+		logAnchor.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent keyEvent) {
+				if (keyEvent.getCode() == KeyCode.ENTER) {
+					loginButtonAction();
+				}
+			}
+		});
+
+		regAnchor.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent keyEvent) {
+				if (keyEvent.getCode() == KeyCode.ENTER) {
+					registerButtonAction();
+				}
 			}
 		});
 	}
