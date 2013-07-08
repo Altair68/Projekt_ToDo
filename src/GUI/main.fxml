@@ -11,12 +11,12 @@
   <children>
     <SplitPane disable="false" dividerPositions="0.7645290581162325" focusTraversable="true" orientation="HORIZONTAL" prefHeight="376.0" prefWidth="600.0" visible="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="24.0">
       <items>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+        <AnchorPane minHeight="0.0" minWidth="250.0" prefHeight="160.0" prefWidth="100.0">
           <children>
             <TreeView fx:id="taskTree" editable="true" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
           </children>
         </AnchorPane>
-        <SplitPane dividerPositions="0.5491071428571429" focusTraversable="true" minHeight="-1.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+        <SplitPane dividerPositions="0.5491071428571429" focusTraversable="true" minHeight="-1.0" minWidth="232.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
           <items>
             <AnchorPane minHeight="100.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
               <children>
