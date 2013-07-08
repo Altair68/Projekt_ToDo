@@ -39,6 +39,8 @@ public class ControllerMain implements Initializable {
 	private CheckBox propCheckPrioritized;
 	@FXML
 	private CheckBox propCheckDone;
+	@FXML
+	private Label propLabelType;
 
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle) {
