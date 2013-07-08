@@ -5,7 +5,10 @@ import TODO.User;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -18,30 +21,30 @@ import java.util.ResourceBundle;
 public class ControllerLogin implements Initializable {
 	//Login + Register
 	@FXML
-	Button loginButton;
+	private Button loginButton;
 	@FXML
-	Button registerButton;
+	private Button registerButton;
 	@FXML
-	TextField logUsername;
+	private TextField logUsername;
 	@FXML
-	PasswordField logPassword;
+	private PasswordField logPassword;
 	@FXML
-	Label logLabelInfo;
+	private Label logLabelInfo;
 	@FXML
-	TextField regUsername;
+	private TextField regUsername;
 	@FXML
-	PasswordField regPassword;
+	private PasswordField regPassword;
 	@FXML
-	PasswordField regPasswordRe;
+	private PasswordField regPasswordRe;
 	@FXML
-	Label regLabelInfo;
+	private Label regLabelInfo;
 	@FXML
-	AnchorPane logAnchor;
+	private AnchorPane logAnchor;
 	@FXML
-	AnchorPane regAnchor;
+	private AnchorPane regAnchor;
 
 	//Variablen
-	ListController listController = ListController.getListController();
+	private ListController listController = ListController.getListController();
 
 
 	@Override

@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Task {
 
+	private String name;
 	private boolean done;
 	private boolean prioritized;
 	private String description;
@@ -20,13 +21,14 @@ public class Task {
 
 	}
 
-	public Task(String aDescription, boolean isPrioritized) {
+	public Task(String aDescription, boolean isPrioritized, String aName) {
 		this.description = aDescription;
 		this.prioritized = isPrioritized;
+		this.name = aName;
 	}
 
 	public Task(String aDescription) {
-		this(aDescription, false);
+		this(aDescription, false, "New Task");
 	}
 
 	public boolean isDone() {
@@ -51,5 +53,13 @@ public class Task {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }

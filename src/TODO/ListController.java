@@ -20,6 +20,7 @@ public class ListController {
 	private List<ToDoList> toDoListList;
 
 	private UserList users;
+	private User logedUser;
 
 	private ListController() {
 		checkDirs();
@@ -172,6 +173,7 @@ public class ListController {
 		if (checkUserExists(aUserToCheck)) {
 			User theDbUser = findUserByUsername(aUserToCheck.getUsername());
 			if (theDbUser.getPassword().equals(aUserToCheck.getPassword())) {
+				logedUser = aUserToCheck;
 				return true;
 			} else {
 				return false;
@@ -186,5 +188,10 @@ public class ListController {
 			listController = new ListController();
 		}
 		return listController;
+	}
+
+	public void createNewList() {
+		ToDoList theList = new ToDoList(logedUser, "New List");
+		getToDoListList().add(theList);
 	}
 }
