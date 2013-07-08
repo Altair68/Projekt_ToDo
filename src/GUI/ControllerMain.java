@@ -14,17 +14,27 @@ import java.util.ResourceBundle;
 public class ControllerMain implements Initializable {
 	//Main
 	@FXML
-	TreeView taskTree;
+	private TreeView taskTree;
 	@FXML
-	ListView listList;
+	private ListView listList;
 	@FXML
-	MenuItem menuFileNew;
+	private MenuItem menuFileNew;
 	@FXML
-	MenuItem menuFileSave;
+	private MenuItem menuFileSave;
 	@FXML
-	MenuItem menuFileClose;
+	private MenuItem menuFileClose;
 	@FXML
-	MenuItem menuHelpAbout;
+	private MenuItem menuHelpAbout;
+	@FXML
+	private TextField propTxtUser;
+	@FXML
+	private TextField propTxtName;
+	@FXML
+	private TextArea propTxaDescription;
+	@FXML
+	private CheckBox propCheckPrioritized;
+	@FXML
+	private CheckBox propCheckDone;
 
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle) {
