@@ -8,10 +8,16 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 
@@ -216,11 +222,12 @@ public class ControllerMain implements Initializable {
 	}
 
 	class CustomTreeCell extends TreeCell<Task> {
+
 		@Override
 		protected void updateItem(Task task, boolean b) {
 			super.updateItem(task, b);
 			if (task != null) {
-				setText(task.getName());
+				setText(task.getName() + "\t Done: " + task.isDone() + "\t Prioritized: " + task.isPrioritized());
 			} else {
 				setText(null);
 			}
