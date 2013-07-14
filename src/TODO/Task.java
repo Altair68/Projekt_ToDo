@@ -16,19 +16,20 @@ public class Task {
 	private boolean done;
 	private boolean prioritized;
 	private String description;
+	private User user;
 
 	private Task() {
-
 	}
 
-	public Task(String aDescription, boolean isPrioritized, String aName) {
+	public Task(String aDescription, boolean isPrioritized, String aName, User aUser) {
 		this.description = aDescription;
 		this.prioritized = isPrioritized;
 		this.name = aName;
+		this.user = aUser;
 	}
 
 	public Task(String aDescription) {
-		this(aDescription, false, "New Task");
+		this(aDescription, false, "New Task", ListController.getListController().getLoggedUser());
 	}
 
 	public boolean isDone() {
@@ -61,5 +62,9 @@ public class Task {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public User getUser() {
+		return user;
 	}
 }
