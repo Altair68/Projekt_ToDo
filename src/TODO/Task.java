@@ -1,6 +1,7 @@
 package TODO;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,8 +18,10 @@ public class Task {
 	private boolean prioritized;
 	private String description;
 	private User user;
+	private List<Task> subTask;
 
 	private Task() {
+
 	}
 
 	public Task(String aDescription, boolean isPrioritized, String aName, User aUser) {
@@ -54,6 +57,17 @@ public class Task {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public List<Task> getSubTask() {
+		if (subTask == null) {
+			subTask = new ArrayList<Task>();
+		}
+		return subTask;
+	}
+
+	public void addSubTask(Task aTaks) {
+		getSubTask().add(aTaks);
 	}
 
 	public String getName() {
