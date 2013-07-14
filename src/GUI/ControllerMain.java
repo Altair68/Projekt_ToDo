@@ -58,6 +58,7 @@ public class ControllerMain implements Initializable {
 		menuFileClose.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent actionEvent) {
+				ListController.getListController().marshallData();
 				Main.getPrimaryStage().close();
 			}
 		});
@@ -179,7 +180,7 @@ public class ControllerMain implements Initializable {
 	private void fillTodoList() {
 		int index = listList.getSelectionModel().getSelectedIndex();
 		listList.setItems(null);
-		ObservableList<ToDoList> listItems = FXCollections.observableArrayList(ListController.getListController().getToDoListList());
+		ObservableList<ToDoList> listItems = FXCollections.observableArrayList(ListController.getListController().getListsForUser());
 		listList.setItems(listItems);
 		listList.getSelectionModel().select(index);
 	}

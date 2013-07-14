@@ -4,8 +4,7 @@ import GUI.ControllerMain;
 
 import javax.xml.bind.*;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -122,6 +121,16 @@ public class ListController {
 			toDoListList = new ArrayList<ToDoList>();
 		}
 		return toDoListList;
+	}
+
+	public List<ToDoList> getListsForUser() {
+		List<ToDoList> theTemp = new ArrayList<ToDoList>();
+		for (ToDoList eachList : getToDoListList()) {
+			if (eachList.getCreator().getUsername().equals(getLoggedUser().getUsername())) {
+				theTemp.add(eachList);
+			}
+		}
+		return theTemp;
 	}
 
 	public UserList getUserList() {
