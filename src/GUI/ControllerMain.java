@@ -15,9 +15,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 
-import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class ControllerMain implements Initializable {
@@ -46,6 +44,8 @@ public class ControllerMain implements Initializable {
 	private CheckBox propCheckDone;
 	@FXML
 	private Label propLabelType;
+	@FXML
+	private Button propBtnSave;
 
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -61,6 +61,19 @@ public class ControllerMain implements Initializable {
 			public void handle(ActionEvent actionEvent) {
 				ListController.getListController().createNewList();
 				fillTodoList();
+			}
+		});
+
+		propBtnSave.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent actionEvent) {
+				if ("ToDoList".equals(propLabelType.getText())) {
+					saveList();
+				} else {
+					saveTask();
+				}
+				fillTodoList();
+				buildTreeFromList((ToDoList)listList.getSelectionModel().getSelectedItem());
 			}
 		});
 
@@ -93,7 +106,6 @@ public class ControllerMain implements Initializable {
 		listList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<ToDoList>() {
 			@Override
 			public void changed(ObservableValue<? extends ToDoList> observableValue, ToDoList toDoList, ToDoList toDoList2) {
-				saveProps(toDoList);
 				propLabelType.setText("ToDoList");
 				if (toDoList2 != null) {
 					propTxtUser.setText(toDoList2.getCreator().getUsername());
@@ -101,21 +113,43 @@ public class ControllerMain implements Initializable {
 					propTxaDescription.setText("");
 					propCheckPrioritized.setSelected(false);
 					propCheckDone.setSelected(false);
+					buildTreeFromList(toDoList2);
 				}
-				fillTodoList();
 			}
 		});
 
-		taskTree.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Task>() {
+		listList.focusedProperty().addListener(new ChangeListener<Boolean>() {
 			@Override
-			public void changed(ObservableValue<? extends Task> observableValue, Task task, Task task2) {
-				saveProps(task);
-				propLabelType.setText("Task");
-				propTxtUser.setText(task2.getUser().getUsername());
-				propTxtName.setText(task2.getName());
-				propTxaDescription.setText(task2.getDescription());
-				propCheckPrioritized.setSelected(task2.isPrioritized());
-				propCheckDone.setSelected(task2.isDone());
+			public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean aBoolean2) {
+				propLabelType.setText("ToDoList");
+			}
+		});
+
+		taskTree.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TreeItem<Task>>() {
+			@Override
+			public void changed(ObservableValue<? extends TreeItem<Task>> observableValue, TreeItem<Task> taskTreeItem, TreeItem<Task> taskTreeItem2) {
+				if (taskTreeItem2 != null) {
+					Task task2 = taskTreeItem2.getValue();
+					propLabelType.setText("Task");
+					propTxtUser.setText(task2.getUser().getUsername());
+					propTxtName.setText(task2.getName());
+					propTxaDescription.setText(task2.getDescription());
+					propCheckPrioritized.setSelected(task2.isPrioritized());
+					propCheckDone.setSelected(task2.isDone());
+				}
+			}
+		});
+
+		taskTree.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent mouseEvent) {
+				if (mouseEvent.getClickCount() > 1) {
+					ToDoList list = (ToDoList)listList.getSelectionModel().getSelectedItem();
+					ToDoList theList = ListController.getListController().getToDoListList().get(ListController.getListController().getToDoListList().indexOf(list));
+					theList.addTask(new Task(""));
+					fillTodoList();
+					buildTreeFromList((ToDoList)listList.getSelectionModel().getSelectedItem());
+				}
 			}
 		});
 
@@ -126,49 +160,66 @@ public class ControllerMain implements Initializable {
 			}
 		});
 
+		taskTree.focusedProperty().addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean aBoolean2) {
+				propLabelType.setText("Task");
+			}
+		});
+
 		fillTodoList();
 	}
 
 	private void fillTodoList() {
-		ObservableList<ToDoList> theItems = FXCollections.observableArrayList(new ArrayList<ToDoList>());
-		listList.setItems(theItems);
-		ObservableList<ToDoList> items = FXCollections.observableArrayList(ListController.getListController().getToDoListList());
-		listList.setItems(items);
+		int index = listList.getSelectionModel().getSelectedIndex();
+		listList.setItems(null);
+		ObservableList<ToDoList> listItems = FXCollections.observableArrayList(ListController.getListController().getToDoListList());
+		listList.setItems(listItems);
+		listList.getSelectionModel().select(index);
 	}
 
-	private void saveProps(Object o) {
-		if("ToDoList".equals(propLabelType.getText()) && o instanceof ToDoList) {
-			ToDoList list = (ToDoList)o;
+	private void saveList() {
+		ToDoList list = (ToDoList)listList.getSelectionModel().getSelectedItem();
+		if (list != null) {
 			ToDoList theList = ListController.getListController().getToDoListList().get(ListController.getListController().getToDoListList().indexOf(list));
-			theList.setName(propTxtName.getText());
-		} else if ("Task".equals(propLabelType.getText()) && o instanceof ToDoList) {
-			Task task = (Task)taskTree.getSelectionModel().getSelectedItem();
-			task.setName(propTxtName.getText());
-			task.setDescription(propTxaDescription.getText());
-			task.setDone(propCheckDone.isSelected());
-			task.setPrioritized(propCheckPrioritized.isSelected());
-		} else if ("Task".equals(propLabelType.getText()) && o instanceof Task) {
-			Task task = (Task)o;
-			task.setName(propTxtName.getText());
-			task.setDescription(propTxaDescription.getText());
-			task.setDone(propCheckDone.isSelected());
-			task.setPrioritized(propCheckPrioritized.isSelected());
-		} else if ("ToDoList".equals(propLabelType.getText()) && o instanceof Task) {
-			ToDoList list = (ToDoList)listList.getSelectionModel().getSelectedItem();
-			if (list != null) {
-				ToDoList theList = ListController.getListController().getToDoListList().get(ListController.getListController().getToDoListList().indexOf(list));
-				if (theList != null) {
-					theList.setName(propTxtName.getText());
-				}
+			if (theList != null) {
+				theList.setName(propTxtName.getText());
 			}
 		}
+	}
+
+	private void saveTask() {
+		ToDoList list = (ToDoList)listList.getSelectionModel().getSelectedItem();
+		ToDoList theList = ListController.getListController().getToDoListList().get(ListController.getListController().getToDoListList().indexOf(list));
+		Task task = theList.getTask((Task)((TreeItem)taskTree.getSelectionModel().getSelectedItem()).getValue());
+		task.setName(propTxtName.getText());
+		task.setDescription(propTxaDescription.getText());
+		task.setDone(propCheckDone.isSelected());
+		task.setPrioritized(propCheckPrioritized.isSelected());
+	}
+
+	public void buildTreeFromList(ToDoList aList) {
+		TreeItem<Task> rootItem = new TreeItem<Task>(new Task("Dummy", false, aList.getName(), aList.getCreator()));
+		rootItem.setExpanded(true);
+		for (Task eachTask : aList.getTaskList()) {
+			rootItem.getChildren().add(buildItem(eachTask));
+		}
+		taskTree.setRoot(rootItem);
+	}
+
+	public TreeItem<Task> buildItem(Task aTask) {
+		TreeItem<Task> theItem = new TreeItem<Task>(aTask);
+		for (Task eachTask : aTask.getSubTask()) {
+			theItem.getChildren().add(buildItem(eachTask));
+		}
+		return theItem;
 	}
 
 	class CustomTreeCell extends TreeCell<Task> {
 		@Override
 		protected void updateItem(Task task, boolean b) {
 			super.updateItem(task, b);
-			if (b && task != null) {
+			if (task != null) {
 				setText(task.getName());
 			} else {
 				setText(null);

@@ -37,6 +37,7 @@
                     <CheckBox fx:id="propCheckDone" mnemonicParsing="false" text="" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
                     <TextField id="propUser" fx:id="propTxtUser" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                     <TextField id="propName" fx:id="propTxtName" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                    <Button id="propSave" fx:id="propBtnSave" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6" text="Save" />
                     <Label text="Type" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                     <Label fx:id="propLabelType" text="" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER" />
                   </children>

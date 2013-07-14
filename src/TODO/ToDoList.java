@@ -67,4 +67,18 @@ public class ToDoList {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	public Task getTask(Task aTask) {
+		if (getTaskList().contains(aTask)) {
+			return getTaskList().get(getTaskList().indexOf(aTask));
+		} else {
+			for (Task eachTask : getTaskList()) {
+				Task returnTask = eachTask.getTask(aTask);
+				if (returnTask != null) {
+					return returnTask;
+				}
+			}
+		}
+		return null;
+	}
 }

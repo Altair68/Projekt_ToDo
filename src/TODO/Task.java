@@ -1,6 +1,8 @@
 package TODO;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,7 +19,9 @@ public class Task {
 	private boolean done;
 	private boolean prioritized;
 	private String description;
+	@XmlElement
 	private User user;
+	@XmlElement
 	private List<Task> subTask;
 
 	private Task() {
@@ -80,5 +84,19 @@ public class Task {
 
 	public User getUser() {
 		return user;
+	}
+
+	public Task getTask(Task aTask) {
+		if (getSubTask().contains(aTask)) {
+			return getSubTask().get(getSubTask().indexOf(aTask));
+		} else {
+			for (Task eachTask : getSubTask()) {
+				Task returnTask = eachTask.getTask(aTask);
+				if (returnTask != null) {
+					return returnTask;
+				}
+			}
+		}
+		return null;
 	}
 }
