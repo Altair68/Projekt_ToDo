@@ -1,5 +1,7 @@
 package TODO;
 
+import GUI.ControllerMain;
+
 import javax.xml.bind.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -18,6 +20,7 @@ public class ListController {
 	public static final String SAVE_DIR_NAME = "ToDoList";
 
 	private List<ToDoList> toDoListList;
+	private ControllerMain guiController;
 
 	private UserList users;
 	private User logedUser;
